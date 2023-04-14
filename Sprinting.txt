@@ -1,0 +1,19 @@
+--Credits to bigbenlittlemc
+local spront = game:GetObjects("rbxassetid://8503464491")[1]
+spront.Parent = game.Players.LocalPlayer.PlayerGui
+local button = spront.TextButton  
+local Player = game:GetService('Players')  
+local sprinting = false    
+local function sprint()  	
+local player = Player.LocalPlayer  	
+if sprinting then  		
+sprinting = false  		
+button.Text = 'Sprint: Off'  		
+player.Character.Humanoid:SetAttribute("SpeedBoost",0)
+else  		
+sprinting = true  		
+button.Text = 'Sprint: On'  		
+player.Character.Humanoid:SetAttribute("SpeedBoost",5)
+end  
+end    
+button.MouseButton1Click:Connect(sprint)
