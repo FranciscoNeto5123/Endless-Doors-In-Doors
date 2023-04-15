@@ -307,7 +307,7 @@ local vroom = TweenService:Create(move, TweenInfo.new(1),{Volume = 0.5})
 
                 if entityTable.Config.CanKill and not Char:GetAttribute("IsDead") and not Char:GetAttribute("Invincible") and not Char:GetAttribute("Hiding") and (getPlayerRoot().Position - entityModel.PrimaryPart.Position).Magnitude <= entityTable.Config.KillRange then
                     task.spawn(function()
-if workspace.Ambience_FigureEnd.Playing == true and workspace.Ambience_FigureStart.Playing == true and workspace.Ambience_Figure.Playing == true and workspace.Ambience_FigureEnd.Playing == true and workspace.Ambience_Seek.Playing == true then print("sike") else
+if workspace.Ambience_FigureEnd.Playing == false or workspace.Ambience_FigureStart.Playing == false or workspace.Ambience_Figure.Playing == false or workspace.Ambience_FigureEnd.Playing == false or workspace.Ambience_Seek.Playing == false then
                         Char:SetAttribute("IsDead", true)
 
                         -- Mute entity
