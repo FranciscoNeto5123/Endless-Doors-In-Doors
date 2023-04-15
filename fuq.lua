@@ -307,6 +307,7 @@ local vroom = TweenService:Create(move, TweenInfo.new(1),{Volume = 0.5})
 
                 if entityTable.Config.CanKill and not Char:GetAttribute("IsDead") and not Char:GetAttribute("Invincible") and not Char:GetAttribute("Hiding") and (getPlayerRoot().Position - entityModel.PrimaryPart.Position).Magnitude <= entityTable.Config.KillRange then
                     task.spawn(function()
+if workspace.Ambience_FigureEnd.Playing == true and workspace.Ambience_FigureStart.Playing == true and workspace.Ambience_Figure.Playing == true and workspace.Ambience_FigureEnd.Playing == true and workspace.Ambience_Seek.Playing == true and workspace:FindFirstChild("Blink") and workspace:FindFirstChild("SeekMoving") then print("sike") else
                         Char:SetAttribute("IsDead", true)
 
                         -- Mute entity
@@ -327,7 +328,6 @@ local vroom = TweenService:Create(move, TweenInfo.new(1),{Volume = 0.5})
 
                         -- Death handling
                         
-                        if workspace.Ambience_FigureEnd.Playing == true and workspace.Ambience_FigureStart.Playing == true and workspace.Ambience_Figure.Playing == true and workspace.Ambience_FigureEnd.Playing == true and workspace.Ambience_Seek.Playing == true and workspace:FindFirstChild("Blink") and workspace:FindFirstChild("SeekMoving") then print("sike") else
                         task.spawn(entityTable.Debug.OnDeath)
                         Hum.Health = 0
                         ReSt.GameStats["Player_".. Plr.Name].Total.DeathCause.Value = Rebound
