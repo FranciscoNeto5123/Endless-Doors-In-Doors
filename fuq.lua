@@ -187,6 +187,13 @@ Spawner.runEntity = function(entityTable)
     entityModel:PivotTo(nodes[startNodeIndex].CFrame * CFrame.new(0, 0, startNodeOffset) + Vector3.new(0, 3.5 + entityTable.Config.HeightOffset, 0))
     entityModel.Parent = workspace
     task.spawn(entityTable.Debug.OnEntitySpawned)
+local ItemName = entityModel
+ItemName.PrimaryPart = ItemName.RushNew
+ItemName.Rebound_Cue:Destroy()
+ItemName.PrimaryPart.Sound:Destroy()
+ItemName.PrimaryPart.Close:Destroy()
+ItemName.PrimaryPart.Footsteps:Destroy()
+ItemName.PrimaryPart.Idle:Destroy()
     local spawn = Instance.new("Sound")
 spawn.Parent = entityModel.PrimaryPart
 spawn.Name = "ReboundSpawn"
