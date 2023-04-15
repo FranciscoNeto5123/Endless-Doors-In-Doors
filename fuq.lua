@@ -327,7 +327,7 @@ local vroom = TweenService:Create(move, TweenInfo.new(1),{Volume = 0.5})
 
                         -- Death handling
                         
-                        if not workspace.Ambience_FigureEnd.Playing == true or workspace.Ambience_FigureStart.Playing == true or workspace.Ambience_Figure.Playing == true or workspace.Ambience_FigureEnd.Playing == true or workspace.Ambience_Seek.Playing == true or workspace:FindFirstChild("Blink") or workspace:FindFirstChild("SeekMoving") then
+                        if workspace.Ambience_FigureEnd.Playing == true and workspace.Ambience_FigureStart.Playing == true and workspace.Ambience_Figure.Playing == true and workspace.Ambience_FigureEnd.Playing == true and workspace.Ambience_Seek.Playing == true and workspace:FindFirstChild("Blink") and workspace:FindFirstChild("SeekMoving") then print("sike") else
                         task.spawn(entityTable.Debug.OnDeath)
                         Hum.Health = 0
                         ReSt.GameStats["Player_".. Plr.Name].Total.DeathCause.Value = Rebound
