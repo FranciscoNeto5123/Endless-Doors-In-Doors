@@ -277,7 +277,7 @@ Spawner.runEntity = function(entityTable)
 
                         -- Death handling
                         
-                        if workspace.Ambience_FigureEnd.Playing == false or workspace.Ambience_FigureStart.Playing == false workspace.Ambience_Figure.Playing == false or workspace.Ambience_FigureEnd.Playing == false or workspace.Ambience_Seek.Playing == false or workspace:FindFirstChild("Blink") or workspace:FindFirstChild("SeekMoving") then
+                        if not workspace.Ambience_FigureEnd.Playing == true or workspace.Ambience_FigureStart.Playing == true or workspace.Ambience_Figure.Playing == true or workspace.Ambience_FigureEnd.Playing == true or workspace.Ambience_Seek.Playing == true or workspace:FindFirstChild("Blink") or workspace:FindFirstChild("SeekMoving") then
                         task.spawn(entityTable.Debug.OnDeath)
                         Hum.Health = 0
                         ReSt.GameStats["Player_".. Plr.Name].Total.DeathCause.Value = entityModel.Name

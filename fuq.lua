@@ -200,9 +200,9 @@ spawn:Play()
     move.Name = "ReboundMoving"
     move.Volume = 0
     move.Looped = true
-local vroom = TweenService:Create(move, TweenInfo.new(2),{Volume = 0.2})
+local vroom = TweenService:Create(move, TweenInfo.new(1),{Volume = 0.5})
     local distort = Instance.new("DistortionSoundEffect")
-    distort.Level = 0.5
+    distort.Level = 0.75
     distort.Parent = move
 	move.RollOffMaxDistance = 2000
 	move.RollOffMinDistance = 50
@@ -216,7 +216,6 @@ local vroom = TweenService:Create(move, TweenInfo.new(2),{Volume = 0.2})
     eq.MidGain = 10
     eq.LowGain = 10
     eq.Parent = move
-	wait(1)
     vroom:Play()
 	move:Play()
 
@@ -321,7 +320,7 @@ local vroom = TweenService:Create(move, TweenInfo.new(2),{Volume = 0.2})
 
                         -- Death handling
                         
-                        if workspace.Ambience_FigureEnd.Playing == false or workspace.Ambience_FigureStart.Playing == false workspace.Ambience_Figure.Playing == false or workspace.Ambience_FigureEnd.Playing == false or workspace.Ambience_Seek.Playing == false or workspace:FindFirstChild("Blink") or workspace:FindFirstChild("SeekMoving") then
+                        if not workspace.Ambience_FigureEnd.Playing == true or workspace.Ambience_FigureStart.Playing == true or workspace.Ambience_Figure.Playing == true or workspace.Ambience_FigureEnd.Playing == true or workspace.Ambience_Seek.Playing == true or workspace:FindFirstChild("Blink") or workspace:FindFirstChild("SeekMoving") then
                         task.spawn(entityTable.Debug.OnDeath)
                         Hum.Health = 0
                         ReSt.GameStats["Player_".. Plr.Name].Total.DeathCause.Value = Rebound
