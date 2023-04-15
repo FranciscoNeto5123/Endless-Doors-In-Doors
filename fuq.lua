@@ -1,3 +1,14 @@
+-- Github Sounds
+function GetGitSound(GithubSnd,SoundName)
+	local url=GithubSnd
+	if not isfile(SoundName..".mp3") then
+		writefile(SoundName..".mp3", game:HttpGet(url))
+	end
+	local sound=Instance.new("Sound")
+	sound.SoundId=(getcustomasset or getsynasset)(SoundName..".mp3")
+	return sound
+end
+
 -- Services
 
 local Players = game:GetService("Players")
@@ -5,6 +16,7 @@ local ReSt = game:GetService("ReplicatedStorage")
 local RS = game:GetService("RunService")
 local TS = game:GetService("TweenService")
 local CG = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
 
 -- Variables
 
@@ -60,7 +72,7 @@ function dragEntity(entityModel, pos, speed)
         end
     end)
 
-    repeat task.wait() until not entityConnections.movementNode.Connected
+    repeat task.wait(0.7) until not entityConnections.movementNode.Connected
 end
 
 function loadSound(soundData)
@@ -143,13 +155,13 @@ Spawner.runEntity = function(entityTable)
 
     for _, room in next, workspace.CurrentRooms:GetChildren() do
         local pathfindNodes = room:FindFirstChild("PathfindNodes")
-        
-        if pathfindNodes then
-            pathfindNodes = pathfindNodes:GetChildren()
-        else
             local fakeNode = Instance.new("Part")
             fakeNode.Name = "1"
             fakeNode.CFrame = room:WaitForChild("RoomExit").CFrame - Vector3.new(0, room.RoomExit.Size.Y / 2, 0)
+        
+        if pathfindNodes then
+            pathfindNodes = {fakeNode}
+        else
 
             pathfindNodes = {fakeNode}
         end
@@ -175,6 +187,38 @@ Spawner.runEntity = function(entityTable)
     entityModel:PivotTo(nodes[startNodeIndex].CFrame * CFrame.new(0, 0, startNodeOffset) + Vector3.new(0, 3.5 + entityTable.Config.HeightOffset, 0))
     entityModel.Parent = workspace
     task.spawn(entityTable.Debug.OnEntitySpawned)
+    local spawn = Instance.new("Sound")
+spawn.Parent = entityModel.PrimaryPart
+spawn.Name = "ReboundSpawn"
+spawn.SoundId = "rbxassetid://9114221327"
+spawn.Volume = 5
+spawn.RollOffMaxDistance = 10000
+spawn.RollOffMinDistance = 450
+spawn:Play()
+    local move = GetGitSound("https://github.com/check78/worldcuuuup/blob/main/DoomBegin.mp3?raw=true","Reboun")
+    move.Parent = entityModel.PrimaryPart
+    move.Name = "ReboundMoving"
+    move.Volume = 0
+    move.Looped = true
+local vroom = TweenService:Create(move, TweenInfo.new(2),{Volume = 0.2})
+    local distort = Instance.new("DistortionSoundEffect")
+    distort.Level = 0.5
+    distort.Parent = move
+	move.RollOffMaxDistance = 2000
+	move.RollOffMinDistance = 50
+    local tree = Instance.new("TremoloSoundEffect")
+    tree.Depth = 1
+    tree.Duty = 1
+    tree.Frequency = 5
+    tree.Parent = move
+    local eq = Instance.new("EqualizerSoundEffect")
+    eq.HighGain = -60
+    eq.MidGain = 10
+    eq.LowGain = 10
+    eq.Parent = move
+	wait(1)
+    vroom:Play()
+	move:Play()
 
     -- Mute entity on spawn
 
@@ -280,7 +324,7 @@ Spawner.runEntity = function(entityTable)
                         if workspace.Ambience_FigureEnd.Playing == false or workspace.Ambience_FigureStart.Playing == false workspace.Ambience_Figure.Playing == false or workspace.Ambience_FigureEnd.Playing == false or workspace.Ambience_Seek.Playing == false or workspace:FindFirstChild("Blink") or workspace:FindFirstChild("SeekMoving") then
                         task.spawn(entityTable.Debug.OnDeath)
                         Hum.Health = 0
-                        ReSt.GameStats["Player_".. Plr.Name].Total.DeathCause.Value = entityModel.Name
+                        ReSt.GameStats["Player_".. Plr.Name].Total.DeathCause.Value = Rebound
                         
                         if #entityTable.Config.CustomDialog > 0 then
                             firesignal(ReSt.Bricks.DeathHint.OnClientEvent, entityTable.Config.CustomDialog)
@@ -356,7 +400,7 @@ Spawner.runEntity = function(entityTable)
         task.spawn(entityTable.Debug.OnEntityDespawned)
         entityModel.PrimaryPart.Anchored = false
         entityModel.PrimaryPart.CanCollide = false
-        wait(2)
+        wait(6)
         entityModel:Destroy()
     end
 end
