@@ -3,7 +3,6 @@
 -- Get the player's character and humanoid
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
 
 -- Set up stamina variables
 local maxStamina = 100
@@ -36,13 +35,14 @@ sprintButton.MouseButton1Click:Connect(function()
     isSprinting = not isSprinting
 end)
 
+coroutine.wrap(function()
 while true do
     if isSprinting and stamina > 0 then
         stamina = stamina - staminaDepletionRate
-        humanoid.WalkSpeed = 24
+        player.Character.Humanoid:SetAttribute("SpeedBoost",5)
         button.Text = "Sprint On"
     else
-        humanoid.WalkSpeed = 16
+        player.Character.Humanoid:SetAttribute("SpeedBoost",0)
         if stamina < 100 then
             stamina = stamina + staminaRecoveryRate
             button.Text = "Sprint Off"
@@ -50,3 +50,4 @@ while true do
     end
     wait(1.2)
 end
+end)()
