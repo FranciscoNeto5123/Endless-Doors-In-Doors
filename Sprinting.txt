@@ -1,19 +1,52 @@
---Credits to bigbenlittlemc
-local spront = game:GetObjects("rbxassetid://8503464491")[1]
-spront.Parent = game.Players.LocalPlayer.PlayerGui
-local button = spront.TextButton  
-local Player = game:GetService('Players')  
-local sprinting = false    
-local function sprint()  	
-local player = Player.LocalPlayer  	
-if sprinting then  		
-sprinting = false  		
-button.Text = 'Sprint: Off'  		
-player.Character.Humanoid:SetAttribute("SpeedBoost",0)
-else  		
-sprinting = true  		
-button.Text = 'Sprint: On'  		
-player.Character.Humanoid:SetAttribute("SpeedBoost",5)
-end  
-end    
-button.MouseButton1Click:Connect(sprint)
+-- idk how to code, this was made by 2 ais
+
+-- Get the player's character and humanoid
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Set up stamina variables
+local maxStamina = 100
+local currentStamina = maxStamina
+local staminaDepletionRate = 5 -- How quickly stamina depletes per second while sprinting
+local staminaRecoveryRate = 2 -- How quickly stamina recovers per second while not sprinting
+local StaminaGui = Instance.new("ScreenGui")
+StaminaGui.Parent = game.Players.LocalPlayer.PlayerGui
+
+-- Create the button
+local button = Instance.new("TextButton")
+button.Name = "MyButton"
+button.Text = "Sprint Off"
+button.FontSize = Enum.FontSize.Size24
+button.TextColor3 = Color3.new(1, 1, 1)
+button.BackgroundColor3 = Color3.fromRGB(204, 153, 102) -- Light brown color
+button.BorderSizePixel = 1
+button.BorderColor3 = Color3.fromRGB(255, 255, 153) -- Light yellow outline color
+button.Size = UDim2.new(0, 200, 0, 50)
+button.Position = UDim2.new(0, 1400, 0, 155)
+button.Parent = StaminaGui
+button.Font = "Oswald"
+button.Style = "RobloxButton"
+
+local sprintButton = button
+local stamina = 100
+local isSprinting = false
+
+sprintButton.MouseButton1Click:Connect(function()
+    isSprinting = not isSprinting
+end)
+
+while true do
+    if isSprinting and stamina > 0 then
+        stamina = stamina - staminaDepletionRate
+        humanoid.WalkSpeed = 24
+        button.Text = "Sprint On"
+    else
+        humanoid.WalkSpeed = 16
+        if stamina < 100 then
+            stamina = stamina + staminaRecoveryRate
+            button.Text = "Sprint Off"
+        end
+    end
+    wait(1.2)
+end
