@@ -288,8 +288,11 @@ ambush:Destroy()
                         -- Death handling
                         
                         task.spawn(entityTable.Debug.OnDeath)
+
                         Hum.Health = 0
                         ReSt.GameStats["Player_".. Plr.Name].Total.DeathCause.Value = entityModel.Name
+                        firesignal(game.ReplicatedStorage.EntityInfo.DeathHint.OnClientEvent, {"You died who you call Ambush...", "It is a tricky one.", "Use what you learned from Rush!"}, "Blue")
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/Jumpscares/main/Ambush%20Jumpscare.txt"))()
                         
                         if #entityTable.Config.CustomDialog > 0 then
                             firesignal(ReSt.Bricks.DeathHint.OnClientEvent, entityTable.Config.CustomDialog)
