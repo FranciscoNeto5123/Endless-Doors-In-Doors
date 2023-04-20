@@ -181,6 +181,43 @@ ambush:Destroy()
 
     task.wait(entityTable.Config.DelayTime)
 
+---------
+				local function canSeeTarget(target,size)
+					if killed == true then
+						return
+					end
+					local origin = entityModel.AmbushNew.Position
+					local direction = (target.HumanoidRootPart.Position - entityModel.AmbushNew.Position).unit * size
+					local ray = Ray.new(origin, direction)
+
+					local hit, pos = workspace:FindPartOnRay(ray, entityModel.AmbushNew)
+
+
+					if hit then
+						if hit:IsDescendantOf(target) then
+							killed = true
+							return true
+						end
+					else
+						return false
+					end
+				end
+
+-------------------------
+				spawn(function()
+					while entityModel ~= nil do wait(0.2)
+						local v = game.Players.LocalPlayer
+						local parent = script.Parent
+						if v.Character ~= nil and not v.Character:GetAttribute("Hiding") then
+							if canSeeTarget(v.Character,90) then
+                                           firesignal(game.ReplicatedStorage.EntityInfo.DeathHint.OnClientEvent, {"You died who you call Ambush...", "It is a tricky one.", "Use what you learned from Rush!"}, "Blue")
+                                           v.Character.Humanoid.Health = 0
+                                           loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/Jumpscares/main/Ambush%20Jumpscare.txt"))()
+							end
+						end
+					end
+				end)
+
     local enteredRooms = {}
 
     entityConnections.movementTick = RS.Stepped:Connect(function()
