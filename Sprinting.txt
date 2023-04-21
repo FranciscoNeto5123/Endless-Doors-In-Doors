@@ -1,3 +1,10 @@
+local PlayerGui = game.Players.LocalPlayer.PlayerGui.MainUI.Settings.List.Input
+
+-- MOBILE
+local function Mobile()
+
+firesignal(game:GetService("ReplicatedStorage").EntityInfo.Caption.OnClientEvent, 'Platform: Mobile, Click the Sprint Button to Sprint.',true)
+
 -- idk how to code, this was made by 2 ais
 
 -- Get the player's character and humanoid
@@ -97,3 +104,100 @@ while true do
     wait(0.1)
 end
 end)()
+end
+
+-- PC
+local function PC()
+firesignal(game:GetService("ReplicatedStorage").EntityInfo.Caption.OnClientEvent, 'Platform: PC, LeftShift to Sprint.',true)
+-- idk how to code, this was made by 2 ais
+
+-- Get the player's character and humanoid
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character.Humanoid
+
+-- Set up stamina variables
+local UIS = game:GetService("UserInputService")
+local sprinting = false
+local stamina = 100
+local maxStamina = 100
+local staminaDepletionRate = 1
+local staminaRecoveryRate = 0.5
+local StaminaGui = Instance.new("ScreenGui")
+StaminaGui.Parent = game.Players.LocalPlayer.PlayerGui
+StaminaGui.Name = "StaminaGui"
+local Color = Instance.new("ColorCorrectionEffect")
+Color.Parent = game.Lighting
+Color.Name = "StaminaColor"
+
+local sprintButton = button
+local stamina = 100
+local staminaBar = Instance.new("Frame")
+staminaBar.Size = UDim2.new(0, 200, 0, 20)
+staminaBar.Position = UDim2.new(0, 1400, 0, 155)
+staminaBar.BackgroundColor3 = Color3.new(0, 0, 0)
+staminaBar.BorderSizePixel = 0
+staminaBar.Visible = true
+staminaBar.Parent = StaminaGui
+
+local staminaFill = Instance.new("Frame")
+staminaFill.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
+staminaFill.BackgroundColor3 = Color3.new(0, 1, 0)
+staminaFill.BorderSizePixel = 0
+staminaFill.Parent = staminaBar
+staminaFill.Style = "DropShadow"
+
+local sprinting = false
+
+-- Define functions
+local function updateStaminaBar()
+    staminaFill.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
+end
+
+local function startSprinting()
+    sprinting = true
+    humanoid:SetAttribute("SpeedBoost",4.5)
+end
+
+local function stopSprinting()
+    sprinting = false
+    humanoid:SetAttribute("SpeedBoost",0)
+end
+
+UIS.InputBegan:Connect(function(input, gameProcessedEvent)
+    if input.KeyCode == Enum.KeyCode.RightShift then
+    startSprinting()
+end
+end)
+
+UIS.InputEnded:Connect(function(input, gameProcessedEvent)
+    if input.KeyCode == Enum.KeyCode.RightShift then
+stopSprinting()
+end
+end)
+
+coroutine.wrap(function()
+-- Main loop
+while true do
+    if sprinting and stamina > 0 then
+        stamina = stamina - staminaDepletionRate
+        updateStaminaBar()
+    elseif not sprinting and stamina < maxStamina then
+        stamina = stamina + staminaRecoveryRate
+        updateStaminaBar()
+    elseif stamina < 1 and sprinting then
+        stopSprinting()
+        game.TweenService:Create(Color,TweenInfo.new(1),{Brightness = -0.1}):Play()
+        wait(1)
+        game.TweenService:Create(Color,TweenInfo.new(25),{Brightness = 0}):Play()
+    end
+    wait(0.1)
+end
+end)()
+end
+
+if PlayerGui.pc.BackgroundColor3 == Color3.fromRGB(255, 222, 189) then
+PC()
+elseif PlayerGui.mobile.BackgroundColor3 == Color3.fromRGB(255, 222, 189) then
+Mobile()
+end
