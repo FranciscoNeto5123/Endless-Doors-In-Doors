@@ -108,7 +108,7 @@ end
 
 -- PC
 local function PC()
-firesignal(game:GetService("ReplicatedStorage").EntityInfo.Caption.OnClientEvent, 'Platform: PC, LeftShift to Sprint.',true)
+firesignal(game:GetService("ReplicatedStorage").EntityInfo.Caption.OnClientEvent, 'Platform: PC, RightShift to Sprint.',true)
 -- idk how to code, this was made by 2 ais
 
 -- Get the player's character and humanoid
