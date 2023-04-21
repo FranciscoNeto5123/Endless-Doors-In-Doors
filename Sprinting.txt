@@ -3,14 +3,20 @@
 -- Get the player's character and humanoid
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character.Humanoid
 
 -- Set up stamina variables
+local sprinting = false
+local stamina = 100
 local maxStamina = 100
-local currentStamina = maxStamina
-local staminaDepletionRate = 5 -- How quickly stamina depletes per second while sprinting
-local staminaRecoveryRate = 2 -- How quickly stamina recovers per second while not sprinting
+local staminaDepletionRate = 1
+local staminaRecoveryRate = 0.5
 local StaminaGui = Instance.new("ScreenGui")
 StaminaGui.Parent = game.Players.LocalPlayer.PlayerGui
+StaminaGui.Name = "StaminaGui"
+local Color = Instance.new("ColorCorrectionEffect")
+Color.Parent = game.Lighting
+Color.Name = "StaminaColor"
 
 -- Create the button
 local button = Instance.new("TextButton")
@@ -29,25 +35,65 @@ button.Style = "RobloxButton"
 
 local sprintButton = button
 local stamina = 100
-local isSprinting = false
+local staminaBar = Instance.new("Frame")
+staminaBar.Size = UDim2.new(0, 200, 0, 20)
+staminaBar.Position = UDim2.new(0, 1400, 0, 255)
+staminaBar.BackgroundColor3 = Color3.new(0, 0, 0)
+staminaBar.BorderSizePixel = 0
+staminaBar.Visible = true
+staminaBar.Parent = StaminaGui
+
+local staminaFill = Instance.new("Frame")
+staminaFill.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
+staminaFill.BackgroundColor3 = Color3.new(0, 1, 0)
+staminaFill.BorderSizePixel = 0
+staminaFill.Parent = staminaBar
+staminaFill.Style = "DropShadow"
+
+local sprinting = false
+
+
+-- Define functions
+local function updateStaminaBar()
+    staminaFill.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
+end
+
+local function startSprinting()
+    sprinting = true
+    humanoid:SetAttribute("SpeedBoost",4.5)
+end
+
+local function stopSprinting()
+    sprinting = false
+    humanoid:SetAttribute("SpeedBoost",0)
+end
 
 sprintButton.MouseButton1Click:Connect(function()
-    isSprinting = not isSprinting
+if sprinting == false then
+button.Text = "Sprint On"
+    startSprinting()
+else
+button.Text = "Sprint Off"
+stopSprinting()
+end
 end)
 
 coroutine.wrap(function()
+-- Main loop
 while true do
-    if isSprinting and stamina > 0 then
+    if sprinting and stamina > 0 then
         stamina = stamina - staminaDepletionRate
-        player.Character.Humanoid:SetAttribute("SpeedBoost",5)
-        button.Text = "Sprint On"
-    else
-        player.Character.Humanoid:SetAttribute("SpeedBoost",0)
-        if stamina < 100 then
-            stamina = stamina + staminaRecoveryRate
-            button.Text = "Sprint Off"
-        end
+        updateStaminaBar()
+    elseif not sprinting and stamina < maxStamina then
+        stamina = stamina + staminaRecoveryRate
+        updateStaminaBar()
+    elseif stamina < 1 and sprinting then
+        button.Text = "Sprint Off"
+        stopSprinting()
+        game.TweenService:Create(Color,TweenInfo.new(1),{Brightness = -0.1}):Play()
+        wait(1)
+        game.TweenService:Create(Color,TweenInfo.new(25),{Brightness = 0}):Play()
     end
-    wait(1.2)
+    wait(0.1)
 end
 end)()
