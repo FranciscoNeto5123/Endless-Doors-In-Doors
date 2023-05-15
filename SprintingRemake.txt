@@ -1,0 +1,242 @@
+
+--Run Anims Random
+-- 4211220381 913376220 10921076136
+--Walk Anim Forward
+-- rbxassetid://11445351725
+--Walk Anim Backward
+-- rbxassetid://4334594488
+
+--local mom = {4211220381, 913376220, 10921076136}
+
+local userInputService = game:GetService("UserInputService")
+local platform = userInputService:GetPlatform()
+
+-- MOBILE
+local function Mobile()
+
+firesignal(game:GetService("ReplicatedStorage").EntityInfo.Caption.OnClientEvent, 'Platform: Mobile, Click the Sprint Button to Sprint.',true)
+
+-- idk how to code, this was made by 2 ais
+
+-- Set up stamina variables
+local sprinting = false
+local stamina = 100
+local maxStamina = 100
+local staminaDepletionRate = 1
+local staminaRecoveryRate = 0.5
+local StaminaGui = Instance.new("ScreenGui")
+StaminaGui.Parent = game.Players.LocalPlayer.PlayerGui
+StaminaGui.Name = "StaminaGui"
+StaminaGui.ResetOnSpawn = false
+local Color = Instance.new("ColorCorrectionEffect")
+Color.Parent = game.Lighting
+Color.Name = "StaminaColor"
+
+-- Create the button
+local button = Instance.new("TextButton")
+button.Name = "MyButton"
+button.Text = "Sprint Off"
+button.FontSize = Enum.FontSize.Size24
+button.TextColor3 = Color3.new(1, 1, 1)
+button.BackgroundColor3 = Color3.fromRGB(204, 153, 102) -- Light brown color
+button.BorderSizePixel = 1
+button.BorderColor3 = Color3.fromRGB(255, 255, 153) -- Light yellow outline color
+button.Size = UDim2.new(0, 200, 0, 50)
+button.Position = UDim2.new(0, 1400, 0, 155)
+button.Parent = StaminaGui
+button.Font = "Oswald"
+button.Style = "RobloxButton"
+
+local sprintButton = button
+local stamina = 100
+local staminaBar = Instance.new("Frame")
+staminaBar.Size = UDim2.new(0, 200, 0, 20)
+staminaBar.Position = UDim2.new(0, 1400, 0, 255)
+staminaBar.BackgroundColor3 = Color3.new(0, 0, 0)
+staminaBar.BorderSizePixel = 0
+staminaBar.Visible = true
+staminaBar.Parent = StaminaGui
+
+local staminaFill = Instance.new("Frame")
+staminaFill.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
+staminaFill.BackgroundColor3 = Color3.new(0, 1, 0)
+staminaFill.BorderSizePixel = 0
+staminaFill.Parent = staminaBar
+staminaFill.Style = "DropShadow"
+
+local sprinting = false
+
+-- Define functions
+local function updateStaminaBar()
+    staminaFill.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
+end
+
+local function startSprinting()
+
+-- Get the player's character and humanoid
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character.Humanoid
+    sprinting = true
+    humanoid:SetAttribute("SpeedBoost",4.5)
+        --local animation = Instance.new("Animation")
+		--animation.AnimationId = "rbxassetid://".. mom[math.random(1, #mom)]
+		--animTrack = character:FindFirstChildOfClass('Humanoid'):LoadAnimation(animation)
+		--animTrack:Play()
+end
+
+local function stopSprinting()
+
+-- Get the player's character and humanoid
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character.Humanoid
+    sprinting = false
+    humanoid:SetAttribute("SpeedBoost",0)
+    --animTrack:Stop()
+end
+
+sprintButton.MouseButton1Click:Connect(function()
+if sprinting == false then
+button.Text = "Sprint On"
+    startSprinting()
+else
+button.Text = "Sprint Off"
+stopSprinting()
+end
+end)
+
+coroutine.wrap(function()
+while true do
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character.Humanoid
+task.wait()
+end
+end)()
+
+coroutine.wrap(function()
+-- Main loop
+while true do
+    if sprinting and stamina > 0 then
+        stamina = stamina - staminaDepletionRate
+        updateStaminaBar()
+    elseif not sprinting and stamina < maxStamina then
+        stamina = stamina + staminaRecoveryRate
+        updateStaminaBar()
+    elseif stamina < 1 and sprinting then
+        button.Text = "Sprint Off"
+        stopSprinting()
+        game.TweenService:Create(Color,TweenInfo.new(1),{Brightness = -0.1}):Play()
+        wait(1)
+        game.TweenService:Create(Color,TweenInfo.new(25),{Brightness = 0}):Play()
+    end
+    wait(0.1)
+end
+end)()
+end
+
+-- PC
+local function PC()
+firesignal(game:GetService("ReplicatedStorage").EntityInfo.Caption.OnClientEvent, 'Platform: PC, RightShift to Sprint.',true)
+-- idk how to code, this was made by 2 ais
+
+-- Set up stamina variables
+local UIS = game:GetService("UserInputService")
+local sprinting = false
+local stamina = 100
+local maxStamina = 100
+local staminaDepletionRate = 1
+local staminaRecoveryRate = 0.5
+local StaminaGui = Instance.new("ScreenGui")
+StaminaGui.Parent = game.Players.LocalPlayer.PlayerGui
+StaminaGui.Name = "StaminaGui"
+local Color = Instance.new("ColorCorrectionEffect")
+Color.Parent = game.Lighting
+Color.Name = "StaminaColor"
+
+local sprintButton = button
+local stamina = 100
+local staminaBar = Instance.new("Frame")
+staminaBar.Size = UDim2.new(0, 200, 0, 20)
+staminaBar.Position = UDim2.new(0, 1400, 0, 155)
+staminaBar.BackgroundColor3 = Color3.new(0, 0, 0)
+staminaBar.BorderSizePixel = 0
+staminaBar.Visible = true
+staminaBar.Parent = StaminaGui
+
+local staminaFill = Instance.new("Frame")
+staminaFill.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
+staminaFill.BackgroundColor3 = Color3.new(0, 1, 0)
+staminaFill.BorderSizePixel = 0
+staminaFill.Parent = staminaBar
+staminaFill.Style = "DropShadow"
+
+local sprinting = false
+
+-- Define functions
+local function updateStaminaBar()
+    staminaFill.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
+end
+
+local function startSprinting()
+
+-- Get the player's character and humanoid
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character.Humanoid
+    sprinting = true
+    humanoid:SetAttribute("SpeedBoost",4.5)
+end
+
+local function stopSprinting()
+
+-- Get the player's character and humanoid
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character.Humanoid
+    sprinting = false
+    humanoid:SetAttribute("SpeedBoost",0)
+end
+
+UIS.InputBegan:Connect(function(input, gameProcessedEvent)
+    if input.KeyCode == Enum.KeyCode.RightShift then
+    startSprinting()
+end
+end)
+
+UIS.InputEnded:Connect(function(input, gameProcessedEvent)
+    if input.KeyCode == Enum.KeyCode.RightShift then
+stopSprinting()
+end
+end)
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character.Humanoid
+
+coroutine.wrap(function()
+-- Main loop
+while true do
+    if sprinting and stamina > 0 then
+        stamina = stamina - staminaDepletionRate
+        updateStaminaBar()
+    elseif not sprinting and stamina < maxStamina then
+        stamina = stamina + staminaRecoveryRate
+        updateStaminaBar()
+    elseif stamina < 1 and sprinting then
+        stopSprinting()
+        game.TweenService:Create(Color,TweenInfo.new(1),{Brightness = -0.1}):Play()
+        wait(1)
+        game.TweenService:Create(Color,TweenInfo.new(25),{Brightness = 0}):Play()
+    end
+    wait(0.1)
+end
+end)()
+end
+
+if platform == Enum.Platform.Windows or platform == Enum.Platform.OSX then
+PC()
+elseif platform == Enum.Platform.Android or platform == Enum.Platform.IOS then
+Mobile()
+end
